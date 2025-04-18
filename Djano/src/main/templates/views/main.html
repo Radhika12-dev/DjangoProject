@@ -1,9 +1,15 @@
+{% load static %}
 <html lang="en" class="h-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Django Project">
     <meta name="author" content="Radhika">
+
+    <!--Bootstrap core CSS -->
+    <!-- {% static '' %} will automatically loads all the static files-->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
 </head>
 
 <body>
