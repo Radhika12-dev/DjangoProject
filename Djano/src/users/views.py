@@ -3,8 +3,10 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 # AuthenticationForms are used for user login forms in Django
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.views import View
 
+# Function Based View for User Login
 def login_view(request):
     if request.method == 'POST':
         login_form = AuthenticationForm(request=request, data = request.POST)
@@ -28,3 +30,22 @@ def login_view(request):
     elif request.method == 'GET':
         login_form = AuthenticationForm()
     return render(request, 'views/login.html', {'login': login_form})  # Render the login template
+
+#Class Based View for Registering a User
+class RegisterView(View):
+    def get(self, request):
+        register_form = UserCreationForm()
+        return render(request, 'views/register.html', {'register': register_form})
+
+    def post(self, request):
+        register_form = UserCreationForm(data = request.POST)
+        if register_form.is_valid():
+            #UserCreationForm will automatically create a user instance and save it to the  user database
+            user = register_form.save()
+            user.refresh_from_db()  # Refresh the user instance from the database
+            login(request, user)  # Log the user in
+            messages.success(request, f"Registration successful. You are now logged in as {username}.")
+            return redirect('home')
+        else:
+            messages.error(request, f"Invalid registration details.")
+            return render(request, 'views/register.html', {'register': register_form})
