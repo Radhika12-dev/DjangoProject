@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+from django.contrib.messages import constants as messages
 from pathlib import Path
 import os
 
@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'localflavor',  # For US phone number validation
+    'crispy_forms',  # For crispy forms
+    'crispy_bootstrap5',
     'main',  # Your main app
     'users',  # Your users app
 ]
@@ -102,6 +104,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#Login settings
+LOGIN_REDIRECT_URL = '/home/'  # URL to redirect to after login
+LOGIN_URL = '/login/'  # URL to redirect to for login
+
+# Messages settings
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',  # Bootstrap class for error messages
+    messages.SUCCESS: 'success',  # Bootstrap class for success messages
+    messages.WARNING: 'warning',  # Bootstrap class for warning messages
+    messages.INFO: 'info',  # Bootstrap class for info messages
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -126,6 +139,7 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIS_URL = '/media/'
 
+CRISPY_TEMPLATE_PACK = 'bootstrap5'  # Use Bootstrap 5 for crispy forms
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

@@ -18,12 +18,14 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 from main import urls as main_urls
+from users import urls as users_urls
 from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(main_urls)), # Include the main app URLs
+    path('', include(users_urls)), # Include the users app URLs
 ]
 
 #Added for serving static and media files during development which means if we are in development mode then we can access the static files and media files during debuggig

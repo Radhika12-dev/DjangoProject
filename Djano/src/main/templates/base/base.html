@@ -7,6 +7,9 @@
     <meta name="description" content="Django Project">
     <meta name="author" content="Radhika">
 
+    {% block 'title' %}
+    <title> AutoMax - Best Place To Buy & Sell Cars</title>
+    {% endblock %}
     <!--Bootstrap core CSS -->
     <!-- {% static '' %} will automatically loads all the static files-->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
@@ -17,6 +20,16 @@
 </head>
 
 <body>
+    <!-- messages is a keyword in djnago-->
+    {% if messages %}
+    {% for message in messages %}
+    <!-- On the basis of tags from backend whether it is success, faulure etc we will change the class-->
+    <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
     {% block 'body' %}
     {% endblock %}
 </body>
