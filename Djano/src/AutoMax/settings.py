@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'localflavor',  # For US phone number validation
     'crispy_forms',  # For crispy forms
     'crispy_bootstrap5',
+    'django_filters',  # For filtering , first pip install django-filter
     'main',  # Your main app
     'users',  # Your users app
 ]

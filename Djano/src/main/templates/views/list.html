@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block 'body' %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="border-bottom pb-2" style="color: #333;">Create a New Listing</h2>
+    </div>
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="p-4 border rounded-4 shadow-sm bg-white h-100">
+                    <h4 class="mb-3 text-primary">Listing Details</h4>
+                    {{ listing_form|crispy }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-4 border rounded-4 shadow-sm bg-white" style="min-height: 100%;">
+                    <h4 class="mb-3 text-primary">Location Info</h4>
+                    {{ location_form|crispy }}
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5">
+            <button class="btn btn-lg btn-success px-5" type="submit">Save Listing</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

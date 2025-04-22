@@ -3,4 +3,5 @@ from .views import *
 urlpatterns = [
     path('', main_view, name='main'),
     path('home/', home_view, name='home'),  # URL for the home page 
+    path('list/', list_view, name='list'),  # URL for the listings page
 ]

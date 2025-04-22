@@ -1,9 +1,10 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 # AuthenticationForms are used for user login forms in Django
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.decorators import login_required
 from django.views import View
 
 # Function Based View for User Login
@@ -30,6 +31,11 @@ def login_view(request):
     elif request.method == 'GET':
         login_form = AuthenticationForm()
     return render(request, 'views/login.html', {'login': login_form})  # Render the login template
+
+@login_required 
+def logout_view(request):
+    logout(request)
+    return render(request, 'views/main.html')  # Redirect to the main page after logout
 
 #Class Based View for Registering a User
 class RegisterView(View):
