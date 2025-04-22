@@ -5,4 +5,4 @@ def user_listing_path(instance, filename):
     :param instance: The instance of the Profile model.
     :param filename: The name of the uploaded file.(the name of the image eg : user_3/img1.jpeg)
     """
-    return f'user_{instance.user.id}/listings/{filename}'
+    return f'user_{instance.seller.user.id}/listings/{filename}'

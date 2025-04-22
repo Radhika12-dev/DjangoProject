@@ -20,3 +20,6 @@ class Listing(models.Model):
    location = models.OneToOneField(Location, on_delete=models.SET_NULL, null=True)  # Location of the item
    image = models.ImageField(upload_to=user_listing_path, blank=True, null=True)  # Image of the item
 
+   def __str__(self):
+      return f'{self.seller.user.username}\'s listing - {self.model}'
+
