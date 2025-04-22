@@ -50,7 +50,7 @@ class RegisterView(View):
             user = register_form.save()
             user.refresh_from_db()  # Refresh the user instance from the database
             login(request, user)  # Log the user in
-            messages.success(request, f"Registration successful. You are now logged in as {username}.")
+            messages.success(request, f"Registration successful. You are now logged in as {user.username}.")
             return redirect('home')
         else:
             messages.error(request, f"Invalid registration details.")
