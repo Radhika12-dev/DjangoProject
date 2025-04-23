@@ -13,7 +13,9 @@ class Location(models.Model):
     postal_code = models.CharField(
         max_length=6,
         blank=True,
-        validators=[RegexValidator(r'^\d{6}$', 'Enter a valid 6-digit postal code.')]
+        validators=[RegexValidator(r'^\d{6}$', 'Enter a valid 6-digit postal code.')
+        ],
+        
     )  # RegexValidator is used to validate the postal code format.
 
     def __str__(self):

@@ -1,0 +1,40 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block 'body' %}
+<div class="container-fluid bg-light min-vh-100 py-5">
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col text-center">
+                <h2 class="border-bottom pb-2 text-dark">Edit Listing</h2>
+            </div>
+        </div>
+
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card shadow rounded-4 p-4 bg-white h-100">
+                        <h5 class="mb-3 text-primary">Listing Details</h5>
+                        {{ listing_form|crispy }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow rounded-4 p-4 bg-white h-100">
+                        <h5 class="mb-3 text-primary">Location Info</h5>
+                        {{ location_form|crispy }}
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col text-center">
+                    <button class="btn btn-lg btn-success px-5 py-2 rounded-pill shadow-sm" type="submit">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
