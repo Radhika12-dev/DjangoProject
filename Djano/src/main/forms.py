@@ -6,8 +6,8 @@ class ListingForm(forms.ModelForm):
     image = forms.ImageField(required=False)  # Optional image field
     class Meta:
         model = Listing
-        fields = {'brand', 'model', 'vin', 'mileage',
-                  'color', 'description', 'engine', 'transmission', 'image' } # Include all fields from the Listing model
+        fields = ['image', 'brand', 'model', 'vin', 'mileage',
+                  'color', 'engine', 'transmission', 'description' ] # Include all fields from the Listing model
         
         
 

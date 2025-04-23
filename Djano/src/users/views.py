@@ -6,6 +6,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.views import View
+from django.utils.decorators import method_decorator
+from .forms import LocationForm, UserForm, ProfileForm
+from main.models import Listing
 
 # Function Based View for User Login
 def login_view(request):
@@ -55,3 +58,39 @@ class RegisterView(View):
         else:
             messages.error(request, f"Invalid registration details.")
             return render(request, 'views/register.html', {'register': register_form})
+
+#for class based views we need to use method_decorator to apply the login_required decorator     
+@method_decorator(login_required, name='dispatch')  # Ensure the user is logged in to access this view
+#This view is used to populate the profile, location and user db from fontend to backend
+class ProfileView(View):
+
+    def get(self, request):
+        user_listings = Listing.objects.filter(seller=request.user.profile)
+        userform = UserForm(instance=request.user)
+        profileform = ProfileForm(instance=request.user.profile)
+        locationform = LocationForm(instance=request.user.profile.location)
+        return render(request,
+                    'views/profile.html',
+                    {'user_form':userform, 'profile_form': profileform,
+                    'location_form': locationform,
+                    'user_listings': user_listings})  # Render the profile template
+    
+    #As soon as we click save button all the data will be saved to the database after validation
+    def post(self, request):
+        user_listings = Listing.objects.filter(seller=request.user.profile)
+        userform = UserForm(request.POST, instance=request.user)
+        profileform = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        locationform = LocationForm(request.POST, instance=request.user.profile.location)
+
+        if userform.is_valid() and profileform.is_valid() and locationform.is_valid():
+            userform.save()
+            profileform.save()
+            locationform.save()
+            messages.success(request, f"Profile updated successfully.")
+            return redirect('home')
+        else:
+            messages.error(request, f"Invalid profile details.")
+            return render(request,
+                        'views/profile.html',
+                        {'user_form':userform, 'profile_form': profileform,
+                        'location_form': locationform, 'user_listings': user_listings})

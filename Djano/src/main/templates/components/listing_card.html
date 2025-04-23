@@ -16,12 +16,13 @@
         <p class="card-text">{{listing.description}}</p>
         <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group">
-                <a href="" type="button"
+                <!-- Sending url parameter id -->
+                <a href="{% url 'listing' id=listing.id %}" type="button"
                     class="btn btn-sm btn-outline-secondary">View</a>
                 
                 <!-- if the seller wants to edit the listing-->
                 {% if listing.seller.user == request.user %}
-                <a href="" type="button" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <a href="{% url 'edit' id=listing.id %}" type="button" class="btn btn-sm btn-outline-secondary">Edit</a>
                 {% endif %}
             </div>
             <small class="text-muted">{{listing.updated_at}}</small>
