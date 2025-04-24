@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from django.contrib.messages import constants as messages
 from pathlib import Path
 import os
+import environ
+
+#Initialize eniron
+env = environ.Env()
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +26,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_-$#m!h)n1ng&#gilg*ppmm$a@o#y#!cn-7hr@!fipeu3nz$f1'
+# Fething the value of SECRET KEY from .env file
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(env('DEBUG'))
 
 ALLOWED_HOSTS = ['*']
 
@@ -141,6 +147,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIS_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'  # Use Bootstrap 5 for crispy forms
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

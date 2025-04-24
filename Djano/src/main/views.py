@@ -1,12 +1,13 @@
-from django.shortcuts import redirect, render
-from django.shortcuts import HttpResponse
+from django.shortcuts import redirect, render, get_object_or_404
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from .models import Listing
+from .models import Listing, LikedListing
 from .forms import ListingForm
 from users.forms import LocationForm
 from django.contrib import messages
 from .filters import ListingFilters
 from importlib import reload
+from django.core.mail import send_mail
 
 def main_view(request):
     return render(request, 'views/main.html', {"name": "AutoMax"})
@@ -16,8 +17,13 @@ def home_view(request):
     listings = Listing.objects.all()# Fetch all listings from the database
     # Apply filters to the listings based on the request parameters
     listing_filter = ListingFilters(request.GET, queryset=listings)
+
+    #get all the listing_ids that are liked by the user
+    user_liked_listings = LikedListing.objects.filter(profile=request.user.profile).values_list('listing')
+    liked_listings_ids = [l[0] for l in user_liked_listings] 
     context = {
         'listing_filter': listing_filter,  # Pass the filtered listings to the template context 
+        'liked_listings_ids' : liked_listings_ids
     }
     return render(request, 'views/home.html', context=context)
 
@@ -93,4 +99,36 @@ def edit_view(request, id):
             request, f"An error uccured while trying to update"
         )
         return redirect('home')
+
+@login_required
+def like_listing_view(request, id):
+    listing = get_object_or_404(Listing, id = id)
+    #As soon as we get the listing, view will check the likedlisting db , if it creates the listing there that means
+    #user likes the listing if it founds the listing already in db then user is trying to delete the listing
+    liked_listing, created = LikedListing.objects.get_or_create(profile = request.user.profile, listing = listing)
+    if not created:
+        liked_listing.delete()
+    else:
+        liked_listing.save()
+    return JsonResponse({
+        'is_liked_by_user':created
+    })
+
+#email view
+def inquire_listing_view(request, id):
+    listing = get_object_or_404(Listing,id = id)
+    try:
+        emailSubject = f'{request.user.username} is interested in {listing.model}'
+        emailMessage = f'Hi {listing.seller.user.username}, {request.user.username} is interested in your {listing.model}'
+        send_mail(emailSubject, emailMessage, 'noreply@automax.com', [listing.seller.user.email], fail_silently=True)
+        return JsonResponse({
+            'success':True
+        })
+    except Exception as e:
+        return JsonResponse(
+            {
+                'success': False,
+                "info": e
+            }
+        )
     
