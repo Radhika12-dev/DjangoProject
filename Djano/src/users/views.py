@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.utils.decorators import method_decorator
 from .forms import LocationForm, UserForm, ProfileForm
-from main.models import Listing
+from main.models import Listing, LikedListing
 
 # Function Based View for User Login
 def login_view(request):
@@ -66,6 +66,7 @@ class ProfileView(View):
 
     def get(self, request):
         user_listings = Listing.objects.filter(seller=request.user.profile)
+        user_liked_listings = LikedListing.objects.filter(profile=request.user.profile).all()
         userform = UserForm(instance=request.user)
         profileform = ProfileForm(instance=request.user.profile)
         locationform = LocationForm(instance=request.user.profile.location)
@@ -73,11 +74,13 @@ class ProfileView(View):
                     'views/profile.html',
                     {'user_form':userform, 'profile_form': profileform,
                     'location_form': locationform,
-                    'user_listings': user_listings})  # Render the profile template
+                    'user_listings': user_listings,
+                    'user_liked_listing': user_liked_listings})  # Render the profile template
     
     #As soon as we click save button all the data will be saved to the database after validation
     def post(self, request):
         user_listings = Listing.objects.filter(seller=request.user.profile)
+        user_liked_listings = LikedListing.objects.filter(profile=request.user.profile).all()
         userform = UserForm(request.POST, instance=request.user)
         profileform = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         locationform = LocationForm(request.POST, instance=request.user.profile.location)
@@ -93,4 +96,5 @@ class ProfileView(View):
             return render(request,
                         'views/profile.html',
                         {'user_form':userform, 'profile_form': profileform,
-                        'location_form': locationform, 'user_listings': user_listings})
+                        'location_form': locationform, 'user_listings': user_listings,
+                        'user_liked_listing': user_liked_listings})

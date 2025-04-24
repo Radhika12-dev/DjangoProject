@@ -25,4 +25,6 @@ python manage.py --help
 python manage.py migrate
 python manage.py makemigrations
 
+Run pip install django-environ for handling environment variables.
+
 

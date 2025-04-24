@@ -18,12 +18,9 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'first_name', 'last_name']  # Include all fields from the User model
 
 class ProfileForm(forms.ModelForm):
-
-    photo = forms.ImageField(required=False)
     phone = forms.CharField(required=True)
+    bio = forms.TextInput()
     class Meta:
         model = Profile
         fields = ['photo', 'bio', 'phone']
-
-
-    
+  
